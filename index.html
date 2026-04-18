@@ -32,17 +32,29 @@
             align-items: center;
         }
 
-        h2 {
+        .animated-title {
             font-family: 'Outfit', sans-serif;
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 3.5rem;
             margin-bottom: 25px;
-            background: linear-gradient(to right, #4ade80, #3b82f6);
+            background: linear-gradient(90deg, #ff007f, #7928ca, #00d2ff, #7928ca, #ff007f);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 30px rgba(59, 130, 246, 0.3);
+            text-shadow: 0px 4px 20px rgba(121, 40, 202, 0.5);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
+            animation: gradient-shine 3s linear infinite;
+            padding: 10px;
+        }
+
+        @keyframes gradient-shine {
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
         }
 
         .container {
@@ -202,7 +214,7 @@
 
 <body>
 
-    <h2>Panel Chart</h2>
+    <h2 class="animated-title">DPBOSSPAK</h2>
 
     <div class="container">
         <!-- Day Table Headers -->
