@@ -323,20 +323,29 @@
                             </div>
                         `;
                     } else {
-                        // Inject static data so refresh doesn't change it
-                        let { first, middle, third } = getStaticPairs(loopDate);
-                        
-                        // Style Sunday differently visually (Red Jodi)
                         let isSunday = (loopDate.getDay() === 0);
-                        let jodiStyle = isSunday ? 'style="color: var(--accent-sunday);"' : '';
 
-                        boxesHtml += `
-                            <div class="day-box">
-                                <div class="patti">${first}</div>
-                                <div class="jodi" ${jodiStyle}>${middle}</div>
-                                <div class="patti">${third}</div>
-                            </div>
-                        `;
+                        if (isSunday) {
+                            // On Sunday, we don't show numbers
+                            boxesHtml += `
+                                <div class="day-box empty-day">
+                                    <div class="patti">***</div>
+                                    <div class="jodi">**</div>
+                                    <div class="patti">***</div>
+                                </div>
+                            `;
+                        } else {
+                            // Inject static data so refresh doesn't change it
+                            let { first, middle, third } = getStaticPairs(loopDate);
+                            
+                            boxesHtml += `
+                                <div class="day-box">
+                                    <div class="patti">${first}</div>
+                                    <div class="jodi">${middle}</div>
+                                    <div class="patti">${third}</div>
+                                </div>
+                            `;
+                        }
                     }
                 }
 
