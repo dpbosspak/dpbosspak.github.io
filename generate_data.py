@@ -22,7 +22,11 @@ data = {}
 current = start_date
 while current <= end_date:
     date_str = current.strftime("%Y-%m-%d")
-    data[date_str] = generate_pairs()
+    data[date_str] = {
+        "BABAR": generate_pairs(),
+        "786": generate_pairs(),
+        "JINNA": generate_pairs()
+    }
     current += timedelta(days=1)
 
 with open("d:\\dpbs\\data.js", "w") as f:

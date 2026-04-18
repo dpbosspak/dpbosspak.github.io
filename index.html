@@ -48,6 +48,16 @@
             padding: 10px;
         }
 
+        .market-header {
+            font-family: 'Outfit', sans-serif;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #4ade80;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
         @keyframes gradient-shine {
             0% { background-position: 0% center; }
             100% { background-position: 200% center; }
@@ -93,6 +103,7 @@
             font-weight: 800;
             color: #fff;
             text-transform: uppercase;
+            width: 150px;
         }
 
         .market-result {
@@ -138,7 +149,7 @@
         }
 
         .back-btn {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             align-self: flex-start;
         }
 
@@ -268,6 +279,7 @@
 
         @media (max-width: 700px) {
             .market-card { flex-direction: column; gap: 15px; }
+            .market-title { width: auto; text-align: center; }
             .date-sidebar { width: 90px; font-size: 0.7rem; }
             .header-sidebar { width: 90px; font-size: 0.7rem; }
             .jodi { font-size: 1.1rem; }
@@ -309,6 +321,7 @@
     <div id="panel-view" class="container" style="display: none;">
         
         <button class="back-btn" onclick="showHome()">← Back To Home</button>
+        <div class="market-header" id="panel-market-title">MARKET NAME</div>
 
         <!-- Day Table Headers -->
         <div class="header-row">
@@ -337,10 +350,20 @@
     <script src="data.js"></script>
 
     <script>
+        // Set standard tracked markets
+        const markets = ["BABAR", "786", "JINNA"];
+        let currentMarket = "BABAR";
+
         // 🔹 Navigation Functions
-        function showPanel() {
+        function showPanel(marketName) {
+            currentMarket = marketName;
+            
+            // Build the specifically requested market's chart
+            generateYearToDate();
+
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('panel-view').style.display = 'flex';
+            document.getElementById('panel-market-title').innerText = marketName + " PANEL CHART";
             window.scrollTo(0, 0);
         }
 
@@ -350,36 +373,35 @@
             window.scrollTo(0, 0);
         }
 
-        // 🔹 Fetch static pairs by Date
-        function getStaticPairs(dateObj) {
+        // 🔹 Fetch static pairs by Date and Market from Python Generated Data
+        function getStaticPairs(dateObj, marketName) {
             let y = dateObj.getFullYear();
             let m = String(dateObj.getMonth() + 1).padStart(2, '0');
             let d = String(dateObj.getDate()).padStart(2, '0');
             let dateStr = `${y}-${m}-${d}`;
             
-            if (typeof staticData !== 'undefined' && staticData[dateStr]) {
-                return staticData[dateStr];
+            if (typeof staticData !== 'undefined' && staticData[dateStr] && staticData[dateStr][marketName]) {
+                return staticData[dateStr][marketName];
             }
             return { first: "***", middle: "**", third: "***" };
         }
 
-        // 🔹 Generate Home View Cards
+        // 🔹 Generate Home View Cards dynamically from today's active data per-market
         function generateHomeCards() {
             let container = document.getElementById("home-view");
             let today = new Date();
             let isSunday = (today.getDay() === 0);
             
-            let { first, middle, third } = getStaticPairs(today);
-
-            // If it's closed today
-            if (isSunday || first === "***") {
-                first = "***"; middle = "**"; third = "***";
-            }
-
-            let markets = ["BABAR", "786", "JINNA"];
             let html = "";
 
             markets.forEach(market => {
+                let { first, middle, third } = getStaticPairs(today, market);
+
+                // If it's explicitly closed today
+                if (isSunday || first === "***") {
+                    first = "***"; middle = "**"; third = "***";
+                }
+
                 html += `
                     <div class="market-card">
                         <div class="market-title">${market}</div>
@@ -388,7 +410,7 @@
                             <div>${middle}</div>
                             <div class="market-result-patti">${third}</div>
                         </div>
-                        <button class="panel-btn" onclick="showPanel()">Panel Chart</button>
+                        <button class="panel-btn" onclick="showPanel('${market}')">Panel Chart</button>
                     </div>
                 `;
             });
@@ -396,7 +418,7 @@
             container.innerHTML = html;
         }
 
-        // 🔹 Generate the weekly layout from Jan 1st to Today
+        // 🔹 Generate the weekly layout from Jan 1st to Today actively bound to currentMarket
         function generateYearToDate() {
             let container = document.getElementById("list");
             let htmlChunks = [];
@@ -445,7 +467,8 @@
                                 </div>
                             `;
                         } else {
-                            let { first, middle, third } = getStaticPairs(loopDate);
+                            // Extract precisely for selected market
+                            let { first, middle, third } = getStaticPairs(loopDate, currentMarket);
                             boxesHtml += `
                                 <div class="day-box">
                                     <div class="patti">${first}</div>
@@ -477,9 +500,8 @@
             container.innerHTML = htmlChunks.join('');
         }
 
-        // Initialize App
+        // Initialize App on Load
         generateHomeCards();
-        generateYearToDate();
     </script>
 </body>
 </html>
