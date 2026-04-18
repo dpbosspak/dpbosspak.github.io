@@ -49,12 +49,8 @@
         }
 
         @keyframes gradient-shine {
-            0% {
-                background-position: 0% center;
-            }
-            100% {
-                background-position: 200% center;
-            }
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
 
         .container {
@@ -65,7 +61,88 @@
             gap: 8px;
         }
 
-        /* DPBoss Style Row */
+        /* --- HOME VIEW CARDS --- */
+        #home-view {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .market-card {
+            background: var(--row-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .market-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 15px rgba(59, 130, 246, 0.1);
+        }
+
+        .market-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .market-result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--accent-jodi);
+            background: rgba(0,0,0,0.25);
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .market-result-patti {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .panel-btn, .back-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .panel-btn:hover, .back-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+
+        /* --- DPBoss Style Row (PANEL VIEW) --- */
         .week-row {
             display: flex;
             width: 100%;
@@ -83,7 +160,6 @@
             border-color: rgba(59, 130, 246, 0.4);
         }
 
-        /* Left sidebar for date range */
         .date-sidebar {
             width: 130px;
             background: var(--sidebar-bg);
@@ -106,13 +182,8 @@
             font-size: 0.75rem;
         }
 
-        /* Right side container for 7 days */
-        .boxes-container {
-            display: flex;
-            flex-grow: 1;
-        }
+        .boxes-container { display: flex; flex-grow: 1; }
 
-        /* Individual day box holding the pattern */
         .day-box {
             display: flex;
             flex-direction: column;
@@ -124,15 +195,9 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        .day-box:last-child {
-            border-right: none;
-        }
-        
-        .day-box:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
+        .day-box:last-child { border-right: none; }
+        .day-box:hover { background: rgba(255, 255, 255, 0.05); }
 
-        /* Number components */
         .patti {
             font-size: 0.75rem;
             color: var(--text-muted);
@@ -196,13 +261,13 @@
         }
         .header-day-col:last-child { border-right: none; }
 
-        /* Simple scrollbar for aesthetic */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-color); }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
+            .market-card { flex-direction: column; gap: 15px; }
             .date-sidebar { width: 90px; font-size: 0.7rem; }
             .header-sidebar { width: 90px; font-size: 0.7rem; }
             .jodi { font-size: 1.1rem; }
@@ -235,7 +300,16 @@
 
     <h2 class="animated-title">DPBOSSPAK</h2>
 
-    <div class="container">
+    <!-- HOME VIEW (3 Cards) -->
+    <div id="home-view" class="container">
+        <!-- Cards will be injected via JS -->
+    </div>
+
+    <!-- PANEL VIEW -->
+    <div id="panel-view" class="container" style="display: none;">
+        
+        <button class="back-btn" onclick="showHome()">← Back To Home</button>
+
         <!-- Day Table Headers -->
         <div class="header-row">
             <div class="header-sidebar">Date</div>
@@ -263,6 +337,19 @@
     <script src="data.js"></script>
 
     <script>
+        // 🔹 Navigation Functions
+        function showPanel() {
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('panel-view').style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            document.getElementById('panel-view').style.display = 'none';
+            document.getElementById('home-view').style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
         // 🔹 Fetch static pairs by Date
         function getStaticPairs(dateObj) {
             let y = dateObj.getFullYear();
@@ -270,13 +357,43 @@
             let d = String(dateObj.getDate()).padStart(2, '0');
             let dateStr = `${y}-${m}-${d}`;
             
-            // Retrieve from statically loaded data.js
             if (typeof staticData !== 'undefined' && staticData[dateStr]) {
                 return staticData[dateStr];
             }
-            
-            // Fallback
             return { first: "***", middle: "**", third: "***" };
+        }
+
+        // 🔹 Generate Home View Cards
+        function generateHomeCards() {
+            let container = document.getElementById("home-view");
+            let today = new Date();
+            let isSunday = (today.getDay() === 0);
+            
+            let { first, middle, third } = getStaticPairs(today);
+
+            // If it's closed today
+            if (isSunday || first === "***") {
+                first = "***"; middle = "**"; third = "***";
+            }
+
+            let markets = ["KALYAN MORNING", "MILAN DAY", "MADHURI NIGHT"];
+            let html = "";
+
+            markets.forEach(market => {
+                html += `
+                    <div class="market-card">
+                        <div class="market-title">${market}</div>
+                        <div class="market-result">
+                            <div class="market-result-patti">${first}</div>
+                            <div>${middle}</div>
+                            <div class="market-result-patti">${third}</div>
+                        </div>
+                        <button class="panel-btn" onclick="showPanel()">Panel Chart</button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
         }
 
         // 🔹 Generate the weekly layout from Jan 1st to Today
@@ -287,11 +404,8 @@
             let today = new Date();
             let currentYear = today.getFullYear();
             
-            // Start from January 1st of the current year
             let startDate = new Date(currentYear, 0, 1);
-            
-            // Align start date to the Monday of that week
-            let startDay = startDate.getDay(); // 0 is Sunday, 1 is Monday...
+            let startDay = startDate.getDay();
             let offsetToMonday = startDay === 0 ? -6 : 1 - startDay;
             startDate.setDate(startDate.getDate() + offsetToMonday);
 
@@ -299,7 +413,6 @@
             let currentDate = new Date(startDate); 
 
             while (currentDate <= today) {
-                // Determine week start (Mon) and end (Sun)
                 let weekMon = new Date(currentDate);
                 let weekSun = new Date(currentDate);
                 weekSun.setDate(weekSun.getDate() + 6);
@@ -308,12 +421,10 @@
                 
                 let boxesHtml = "";
                 
-                // Traverse 7 days for the right side
                 for(let i = 0; i < 7; i++) {
                     let loopDate = new Date(currentDate);
                     loopDate.setDate(currentDate.getDate() + i);
 
-                    // If box is Out-of-bounds (before Jan 1 or strictly after today)
                     if (loopDate.getFullYear() < currentYear || loopDate > today) {
                         boxesHtml += `
                             <div class="day-box empty-day">
@@ -326,7 +437,6 @@
                         let isSunday = (loopDate.getDay() === 0);
 
                         if (isSunday) {
-                            // On Sunday, we don't show numbers
                             boxesHtml += `
                                 <div class="day-box empty-day">
                                     <div class="patti">***</div>
@@ -335,9 +445,7 @@
                                 </div>
                             `;
                         } else {
-                            // Inject static data so refresh doesn't change it
                             let { first, middle, third } = getStaticPairs(loopDate);
-                            
                             boxesHtml += `
                                 <div class="day-box">
                                     <div class="patti">${first}</div>
@@ -349,7 +457,6 @@
                     }
                 }
 
-                // Compile the row HTML
                 let weekRow = `
                     <div class="week-row">
                         <div class="date-sidebar">
@@ -363,19 +470,16 @@
                     </div>
                 `;
 
-                // Add newest on top
                 htmlChunks.unshift(weekRow);
-
-                // Move forward 1 week
                 currentDate.setDate(currentDate.getDate() + 7);
             }
             
             container.innerHTML = htmlChunks.join('');
         }
 
-        // Run
+        // Initialize App
+        generateHomeCards();
         generateYearToDate();
     </script>
-
 </body>
 </html>
