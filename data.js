@@ -1803,19 +1803,19 @@ const staticData = {
   },
   "2026-04-17": {
     "BABAR": {
-      "first": "326",
-      "middle": "16",
-      "third": "907"
+      "first": "111",
+      "middle": "36",
+      "third": "222"
     },
     "786": {
-      "first": "755",
-      "middle": "76",
-      "third": "538"
+      "first": "111",
+      "middle": "36",
+      "third": "222"
     },
     "JINNA": {
-      "first": "117",
-      "middle": "90",
-      "third": "352"
+      "first": "111",
+      "middle": "36",
+      "third": "222"
     }
   },
   "2026-04-18": {
