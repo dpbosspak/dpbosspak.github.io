@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yearly Number Pattern</title>
+    <title>DPBoss Style Panel Chart</title>
     
     <!-- Google Fonts for Modern Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --bg-color: #0B0F19;
             --container-bg: #111827;
-            --row-bg: #1F2937;
+            --row-bg: #1e293b;
+            --sidebar-bg: #0f172a;
             --text-main: #FFFFFF;
-            --text-muted: #9CA3AF;
-            --accent-glow: rgba(34, 197, 94, 0.2);
-            --box-bg: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --text-muted: #94a3b8;
+            --accent-jodi: #22c55e;
+            --accent-sunday: #ef4444;
+            --border-color: #334155;
         }
 
         body {
@@ -24,7 +26,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 40px 20px;
+            padding: 20px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -33,80 +35,193 @@
         h2 {
             font-family: 'Outfit', sans-serif;
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
             background: linear-gradient(to right, #4ade80, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 4px 30px rgba(59, 130, 246, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 900px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
 
-        .row {
+        /* DPBoss Style Row */
+        .week-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            width: 100%;
             background: var(--row-bg);
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .row:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 0 20px var(--accent-glow);
-            border-color: rgba(34, 197, 94, 0.3);
-        }
-
-        .date {
-            font-size: 15px;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .box {
-            background: var(--box-bg);
-            padding: 10px 20px;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-weight: 800;
-            color: white;
-            letter-spacing: 3px;
-            font-family: 'Outfit', sans-serif;
-            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .week-row:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.4);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        /* Left sidebar for date range */
+        .date-sidebar {
+            width: 130px;
+            background: var(--sidebar-bg);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-right: 2px solid var(--border-color);
+            flex-shrink: 0;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+
+        .date-sidebar span.to {
+            color: #4ade80;
+            font-size: 0.75rem;
+        }
+
+        /* Right side container for 7 days */
+        .boxes-container {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        /* Individual day box holding the pattern */
+        .day-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: calc(100% / 7);
+            border-right: 1px solid var(--border-color);
+            padding: 8px 2px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .day-box:last-child {
+            border-right: none;
         }
         
+        .day-box:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Number components */
+        .patti {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+        }
+
+        .jodi {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent-jodi);
+            margin: 4px 0;
+            font-family: 'Outfit', sans-serif;
+            text-shadow: 0 2px 5px rgba(34, 197, 94, 0.2);
+        }
+
+        .empty-day .jodi {
+            color: var(--accent-sunday);
+            text-shadow: 0 2px 5px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Day Labels Header Row */
+        .header-row {
+            display: flex;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .header-sidebar {
+            width: 130px;
+            background: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            flex-shrink: 0;
+            letter-spacing: 1px;
+        }
+        
+        .header-days {
+            display: flex;
+            flex-grow: 1;
+            background: #1d4ed8;
+        }
+
+        .header-day-col {
+            width: calc(100% / 7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 0;
+        }
+        .header-day-col:last-child { border-right: none; }
+
         /* Simple scrollbar for aesthetic */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color); 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #374151; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4B5563; 
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+
+        @media (max-width: 600px) {
+            .date-sidebar { width: 90px; font-size: 0.7rem; }
+            .header-sidebar { width: 90px; font-size: 0.7rem; }
+            .jodi { font-size: 1.1rem; }
+            .patti { font-size: 0.65rem; letter-spacing: 1px; }
+            .header-day-col { font-size: 0.7rem; }
         }
     </style>
 </head>
 
 <body>
 
-    <h2>Yearly Number Pattern</h2>
+    <h2>Panel Chart</h2>
 
-    <div class="container" id="list"></div>
+    <div class="container">
+        <!-- Day Table Headers -->
+        <div class="header-row">
+            <div class="header-sidebar">Date</div>
+            <div class="header-days">
+                <div class="header-day-col">Mon</div>
+                <div class="header-day-col">Tue</div>
+                <div class="header-day-col">Wed</div>
+                <div class="header-day-col">Thu</div>
+                <div class="header-day-col">Fri</div>
+                <div class="header-day-col">Sat</div>
+                <div class="header-day-col" style="background: rgba(239, 68, 68, 0.5);">Sun</div>
+            </div>
+        </div>
+
+        <!-- Inject list data here -->
+        <div id="list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
 
     <script>
         // 🔹 Sum logic → return last digit
@@ -120,20 +235,17 @@
             return Math.floor(100 + Math.random() * 900).toString();
         }
 
-        // 🔹 Generate pattern like 123-67-566
-        function generatePattern() {
+        // 🔹 Generate pairs for Panel (First Patti, Jodi, Third Patti)
+        function generatePairs() {
             let first = random3Digit();
             let third = random3Digit();
-
             let firstSum = getLastDigitSum(first);
             let thirdSum = getLastDigitSum(third);
-
             let middle = `${firstSum}${thirdSum}`;
-
-            return `${first}-${middle}-${third}`;
+            return { first, middle, third };
         }
 
-        // 🔹 Generate from start of current year to today (skipping Sundays)
+        // 🔹 Generate the weekly layout from Jan 1st to Today
         function generateYearToDate() {
             let container = document.getElementById("list");
             let htmlChunks = [];
@@ -142,41 +254,83 @@
             let currentYear = today.getFullYear();
             
             // Start from January 1st of the current year
-            let currentDate = new Date(currentYear, 0, 1);
+            let startDate = new Date(currentYear, 0, 1);
             
-            // Ensure we do not stop exactly before today's hours shift
+            // Align start date to the Monday of that week
+            let startDay = startDate.getDay(); // 0 is Sunday, 1 is Monday...
+            let offsetToMonday = startDay === 0 ? -6 : 1 - startDay;
+            startDate.setDate(startDate.getDate() + offsetToMonday);
+
             today.setHours(23, 59, 59, 999);
+            let currentDate = new Date(startDate); 
 
-            // Using while loop to traverse dates
             while (currentDate <= today) {
-                let day = currentDate.getDay(); // 0 = Sunday
+                // Determine week start (Mon) and end (Sun)
+                let weekMon = new Date(currentDate);
+                let weekSun = new Date(currentDate);
+                weekSun.setDate(weekSun.getDate() + 6);
 
-                // If not Sunday, add to the page
-                if (day !== 0) {
-                    let options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                    let formattedDate = currentDate.toLocaleDateString('en-US', options);
+                let formatDDMM = (d) => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+                
+                let boxesHtml = "";
+                
+                // Traverse 7 days for the right side
+                for(let i = 0; i < 7; i++) {
+                    let loopDate = new Date(currentDate);
+                    loopDate.setDate(currentDate.getDate() + i);
 
-                    let pattern = generatePattern();
+                    // If box is Out-of-bounds (before Jan 1 or strictly after today)
+                    if (loopDate.getFullYear() < currentYear || loopDate > today) {
+                        boxesHtml += `
+                            <div class="day-box empty-day">
+                                <div class="patti">***</div>
+                                <div class="jodi">**</div>
+                                <div class="patti">***</div>
+                            </div>
+                        `;
+                    } else {
+                        // Generate the 3-tier patterns
+                        let { first, middle, third } = generatePairs();
+                        
+                        // Style Sunday differently visually (Red Jodi)
+                        let isSunday = (loopDate.getDay() === 0);
+                        let jodiStyle = isSunday ? 'style="color: var(--accent-sunday);"' : '';
 
-                    let row = `
-                        <div class="row">
-                            <div class="date">${formattedDate}</div>
-                            <div class="box">${pattern}</div>
-                        </div>
-                    `;
-
-                    // Putting newest dates at the top is usually a better experience for big lists
-                    htmlChunks.unshift(row);
+                        boxesHtml += `
+                            <div class="day-box">
+                                <div class="patti">${first}</div>
+                                <div class="jodi" ${jodiStyle}>${middle}</div>
+                                <div class="patti">${third}</div>
+                            </div>
+                        `;
+                    }
                 }
 
-                // Increment to next day
-                currentDate.setDate(currentDate.getDate() + 1);
+                // Compile the row HTML
+                let weekRow = `
+                    <div class="week-row">
+                        <div class="date-sidebar">
+                            ${formatDDMM(weekMon)}
+                            <span class="to">TO</span>
+                            ${formatDDMM(weekSun)}
+                        </div>
+                        <div class="boxes-container">
+                            ${boxesHtml}
+                        </div>
+                    </div>
+                `;
+
+                // Add newest on top
+                htmlChunks.unshift(weekRow);
+
+                // Move forward 1 week
+                currentDate.setDate(currentDate.getDate() + 7);
             }
             
             container.innerHTML = htmlChunks.join('');
         }
 
-        // Run the generation logic
+        // Run
         generateYearToDate();
     </script>
 
