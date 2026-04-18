@@ -1,10 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My First Site</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yearly Number Pattern</title>
+    
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0B0F19;
+            --container-bg: #111827;
+            --row-bg: #1F2937;
+            --text-main: #FFFFFF;
+            --text-muted: #9CA3AF;
+            --accent-glow: rgba(34, 197, 94, 0.2);
+            --box-bg: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            background: linear-gradient(to right, #4ade80, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--row-bg);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .row:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 0 20px var(--accent-glow);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .date {
+            font-size: 15px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .box {
+            background: var(--box-bg);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 3px;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Simple scrollbar for aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4B5563; 
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Hello, I'm Sainath 🚀</h1>
-  <p>This is my first GitHub Pages website.</p>
+
+    <h2>Yearly Number Pattern</h2>
+
+    <div class="container" id="list"></div>
+
+    <script>
+        // 🔹 Sum logic → return last digit
+        function getLastDigitSum(numStr) {
+            let sum = numStr.split('').reduce((a, b) => a + Number(b), 0);
+            return sum % 10;
+        }
+
+        // 🔹 Generate random 3-digit number
+        function random3Digit() {
+            return Math.floor(100 + Math.random() * 900).toString();
+        }
+
+        // 🔹 Generate pattern like 123-67-566
+        function generatePattern() {
+            let first = random3Digit();
+            let third = random3Digit();
+
+            let firstSum = getLastDigitSum(first);
+            let thirdSum = getLastDigitSum(third);
+
+            let middle = `${firstSum}${thirdSum}`;
+
+            return `${first}-${middle}-${third}`;
+        }
+
+        // 🔹 Generate from start of current year to today (skipping Sundays)
+        function generateYearToDate() {
+            let container = document.getElementById("list");
+            let htmlChunks = [];
+
+            let today = new Date();
+            let currentYear = today.getFullYear();
+            
+            // Start from January 1st of the current year
+            let currentDate = new Date(currentYear, 0, 1);
+            
+            // Ensure we do not stop exactly before today's hours shift
+            today.setHours(23, 59, 59, 999);
+
+            // Using while loop to traverse dates
+            while (currentDate <= today) {
+                let day = currentDate.getDay(); // 0 = Sunday
+
+                // If not Sunday, add to the page
+                if (day !== 0) {
+                    let options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                    let formattedDate = currentDate.toLocaleDateString('en-US', options);
+
+                    let pattern = generatePattern();
+
+                    let row = `
+                        <div class="row">
+                            <div class="date">${formattedDate}</div>
+                            <div class="box">${pattern}</div>
+                        </div>
+                    `;
+
+                    // Putting newest dates at the top is usually a better experience for big lists
+                    htmlChunks.unshift(row);
+                }
+
+                // Increment to next day
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            container.innerHTML = htmlChunks.join('');
+        }
+
+        // Run the generation logic
+        generateYearToDate();
+    </script>
+
 </body>
 </html>
